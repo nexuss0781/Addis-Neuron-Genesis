@@ -79,6 +79,7 @@ class AGIDatabase:
             self.connect()
 
         cursor = self.conn.cursor()
+        logger.info(f"Starting save_graph for {graph_type}...")
 
         if graph_type == 'conscious':
             # Clear old data
@@ -86,48 +87,116 @@ class AGIDatabase:
             cursor.execute("DELETE FROM conscious_neurons")
 
             # Save neurons
-            for neuron in graph._neurons.values():
-                cursor.execute(
+            batch_size = 10000
+            neuron_data = []
+            total_neurons = len(graph._neurons)
+            
+            for i, neuron in enumerate(graph._neurons.values()):
+                neuron_data.append((
+                    str(neuron.neuron_id),
+                    neuron.neuron_type.name,
+                    json.dumps(neuron.payload, cls=CustomJSONEncoder),
+                    json.dumps(neuron.symbolic_vector, cls=CustomJSONEncoder) if neuron.symbolic_vector else None
+                ))
+                if (i + 1) % batch_size == 0:
+                    cursor.executemany(
+                        "INSERT INTO conscious_neurons (neuron_id, neuron_type, payload, symbolic_vector) VALUES (?, ?, ?, ?)",
+                        neuron_data
+                    )
+                    logger.info(f"Conscious Neurons: Inserted {i + 1}/{total_neurons}...")
+                    neuron_data = []
+            
+            if neuron_data:
+                cursor.executemany(
                     "INSERT INTO conscious_neurons (neuron_id, neuron_type, payload, symbolic_vector) VALUES (?, ?, ?, ?)",
-                    (
-                        str(neuron.neuron_id),
-                        neuron.neuron_type.name,
-                        json.dumps(neuron.payload, cls=CustomJSONEncoder),
-                        json.dumps(neuron.symbolic_vector, cls=CustomJSONEncoder) if neuron.symbolic_vector else None
-                    )
+                    neuron_data
                 )
-                # Save synapses
+                logger.info(f"Conscious Neurons: Final batch inserted. Total: {total_neurons}")
+
+            # Save synapses
+            synapse_data = []
+            total_synapses = 0
+            
+            for i, neuron in enumerate(graph._neurons.values()):
                 for synapse in neuron.connections:
-                    cursor.execute(
+                    synapse_data.append((str(neuron.neuron_id), str(synapse.target_id), synapse.weight, synapse.type.name))
+                    total_synapses += 1
+                
+                if (i + 1) % batch_size == 0:
+                    cursor.executemany(
                         "INSERT OR IGNORE INTO conscious_synapses (source_id, target_id, weight, synapse_type) VALUES (?, ?, ?, ?)",
-                        (str(neuron.neuron_id), str(synapse.target_id), synapse.weight, synapse.type.name)
+                        synapse_data
                     )
+                    logger.info(f"Conscious Synapses: Processed synapses for {i + 1} neurons. Total synapses: {total_synapses}...")
+                    synapse_data = []
+
+            if synapse_data:
+                cursor.executemany(
+                    "INSERT OR IGNORE INTO conscious_synapses (source_id, target_id, weight, synapse_type) VALUES (?, ?, ?, ?)",
+                    synapse_data
+                )
+                logger.info(f"Conscious Synapses: Final batch inserted. Total synapses: {total_synapses}")
+
         elif graph_type == 'subconscious':
             # Clear old data
             cursor.execute("DELETE FROM subconscious_synapses")
             cursor.execute("DELETE FROM subconscious_neurons")
 
             # Save neurons
-            for neuron in graph._neurons.values():
+            batch_size = 10000
+            neuron_data = []
+            total_neurons = len(graph._neurons)
+
+            for i, neuron in enumerate(graph._neurons.values()):
                 payload = {
                     'resonance_frequency': neuron.resonance_frequency,
                     'nap': neuron.nap,
                     'is_shadow': neuron.is_shadow,
                     'corruption_level': neuron.corruption_level
                 }
-                cursor.execute(
+                neuron_data.append((
+                    str(neuron.neuron_id),
+                    json.dumps(payload, cls=CustomJSONEncoder)
+                ))
+                if (i + 1) % batch_size == 0:
+                    cursor.executemany(
+                        "INSERT INTO subconscious_neurons (neuron_id, payload) VALUES (?, ?)",
+                        neuron_data
+                    )
+                    logger.info(f"Subconscious Neurons: Inserted {i + 1}/{total_neurons}...")
+                    neuron_data = []
+
+            if neuron_data:
+                cursor.executemany(
                     "INSERT INTO subconscious_neurons (neuron_id, payload) VALUES (?, ?)",
-                    (
-                        str(neuron.neuron_id),
-                        json.dumps(payload, cls=CustomJSONEncoder)
-                    )
+                    neuron_data
                 )
-                # Save synapses
+                logger.info(f"Subconscious Neurons: Final batch inserted. Total: {total_neurons}")
+
+            # Save synapses
+            synapse_data = []
+            total_synapses = 0
+
+            for i, neuron in enumerate(graph._neurons.values()):
                 for synapse in neuron.connections:
-                    cursor.execute(
+                    # Note: ResonanceNeuron synapse is a simple dict-like object in the original code
+                    synapse_data.append((str(neuron.neuron_id), str(synapse['target_id']), synapse['weight']))
+                    total_synapses += 1
+                
+                if (i + 1) % batch_size == 0:
+                    cursor.executemany(
                         "INSERT OR IGNORE INTO subconscious_synapses (source_id, target_id, weight) VALUES (?, ?, ?)",
-                        (str(neuron.neuron_id), str(synapse.target_id), synapse.weight)
+                        synapse_data
                     )
+                    logger.info(f"Subconscious Synapses: Processed synapses for {i + 1} neurons. Total synapses: {total_synapses}...")
+                    synapse_data = []
+
+            if synapse_data:
+                cursor.executemany(
+                    "INSERT OR IGNORE INTO subconscious_synapses (source_id, target_id, weight) VALUES (?, ?, ?)",
+                    synapse_data
+                )
+                logger.info(f"Subconscious Synapses: Final batch inserted. Total synapses: {total_synapses}")
 
         self.conn.commit()
         logger.info(f"Successfully saved {graph_type} graph to database.")
@@ -200,3 +269,4 @@ class CustomJSONEncoder(json.JSONEncoder):
         if hasattr(obj, '__dict__'):
             return obj.__dict__
         return super().default(obj)
+

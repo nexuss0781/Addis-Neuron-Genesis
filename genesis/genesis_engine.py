@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Generator
 
 # Top-level imports since we are inside the package root
 from neuro_cytoplasm.graph import NeuralGraph
@@ -34,14 +34,14 @@ class GenesisEngine:
             logger.info("Detected YAML genome. Using strict validation.")
             transcriber = GeneticTranscriber()
             genome_data = transcriber.parse(self.dictionary_path)
-            self._seed_from_list(genome_data)
+            self._seed_from_stream(genome_stream)
             
         elif self.dictionary_path.endswith('.json'):
             logger.info("Detected JSON genome. Using Vast Adapter.")
             adapter = VastDictionaryAdapter(self.dictionary_path)
-            # For now, load all into list. In future, stream to seeder.
-            genome_data = list(adapter.stream_entries())
-            self._seed_from_list(genome_data)
+            # Stream entries directly to the seeder to avoid massive memory usage.
+            genome_stream = adapter.stream_entries()
+            self._seed_from_stream(genome_stream)
             
         else:
             raise ValueError("Unsupported dictionary format. Use .yaml or .json")
@@ -61,6 +61,6 @@ class GenesisEngine:
         logger.critical(f"GESTATION COMPLETE. Nodes: {len(self.c_graph)} (C) / {len(self.r_graph)} (R)")
         return self.c_graph, self.r_graph
 
-    def _seed_from_list(self, genome_data: List[Dict[str, Any]]):
-        seeder = PredictiveSeeder(self.c_graph, genome_data)
+    def _seed_from_stream(self, genome_stream: Generator[Dict[str, Any], None, None]):
+        seeder = PredictiveSeeder(self.c_graph, genome_stream)
         seeder.seed()
