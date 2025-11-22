@@ -1,5 +1,5 @@
 import logging
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Generator
 from uuid import UUID
 
 from neuro_cytoplasm.graph import NeuralGraph
@@ -14,14 +14,20 @@ class PredictiveSeeder:
     """
     Orchestrates Neurogenesis.
     """
-    def __init__(self, graph: NeuralGraph, data: List[Dict]):
+    def __init__(self, graph: NeuralGraph, data: Generator[Dict, None, None] | List[Dict]):
         self.graph = graph
-        self.data = data
+        # If data is a generator, convert it to a list for multi-pass seeding.
+        if isinstance(data, Generator):
+            logger.info("Converting dictionary stream to list for multi-pass seeding...")
+            self.data = list(data)
+            logger.info(f"Dictionary list created with {len(self.data)} entries.")
+        else:
+            self.data = data
         self.alphabet_cache: Dict[str, UUID] = {}
         self.pos_cache: Dict[str, UUID] = {}
 
     def seed(self):
-        logger.info("Initiating Predictive Seeding...")
+        logger.info(f"Initiating Predictive Seeding with {len(self.data)} entries...")
         self._build_alphabet()
         self._build_words_and_circuits()
         self._link_definitions()
@@ -30,11 +36,15 @@ class PredictiveSeeder:
 
     def _build_alphabet(self):
         chars = set()
-        for entry in self.data:
+        for i, entry in enumerate(self.data):
+            if i % 10000 == 0 and i > 0:
+                logger.info(f"Alphabet building: Processed {i} entries...")
             chars.update(entry['word'])
             for d in entry['definitions']: chars.update(d['text'])
         
-        for char in sorted(list(chars)):
+        for i, char in enumerate(sorted(list(chars))):
+            if i % 50 == 0 and i > 0:
+                logger.info(f"Alphabet built: {i} characters so far...")
             if char not in self.alphabet_cache:
                 n = Neuron(neuron_type=NeuronType.LINGUISTIC_ALPHABET, payload={"character": char, "name": f"char:{char}"})
                 self.graph.add_neuron(n)
@@ -44,7 +54,9 @@ class PredictiveSeeder:
         # Use the shared WordEncoder for consistency
         encoder = WordEncoder(self.graph, self.alphabet_cache)
         
-        for entry in self.data:
+        for i, entry in enumerate(self.data):
+            if i % 10000 == 0 and i > 0:
+                logger.info(f"Word building: Processed {i} entries...")
             word_n = Neuron(
                 neuron_type=NeuronType.LINGUISTIC_WORD,
                 payload={
@@ -60,7 +72,9 @@ class PredictiveSeeder:
             encoder.encode_word(word_n)
 
     def _link_definitions(self):
-        for entry in self.data:
+        for i, entry in enumerate(self.data):
+            if i % 10000 == 0 and i > 0:
+                logger.info(f"Definition linking: Processed {i} entries...")
             word_n = self.graph.get_neuron_by_name(entry['word'])
             if not word_n: continue
 
@@ -85,7 +99,9 @@ class PredictiveSeeder:
                 word_n.connections.append(SynapticCleft(self.pos_cache[pos], 1.0, SynapseType.HIERARCHICAL))
 
     def _link_relations(self):
-        for entry in self.data:
+        for i, entry in enumerate(self.data):
+            if i % 10000 == 0 and i > 0:
+                logger.info(f"Relation linking: Processed {i} entries...")
             src = self.graph.get_neuron_by_name(entry['word'])
             if not src: continue
 
