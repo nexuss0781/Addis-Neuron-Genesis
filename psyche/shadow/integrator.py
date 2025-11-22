@@ -1,6 +1,10 @@
 import asyncio
 import logging
-from genesis_trinity.psyche.hypothalamus import ConsciousEvent
+from uuid import UUID
+
+# CORRECTED: Removed ConsciousEvent import
+from psyche.hypothalamus import HypothalamusEngine
+from neuro_mitochondria.engine import MetabolicEngine
 from .dark_web import DarkWeb
 from .scavenger import TraumaScavenger
 from .doppelganger import Doppelganger
@@ -8,33 +12,48 @@ from .doppelganger import Doppelganger
 logger = logging.getLogger(__name__)
 
 class ShadowIntegrator:
-    """The Warden."""
-    def __init__(self, psyche, hypo, metabolic):
-        self.psyche = psyche
-        self.hypo = hypo
-        self.metabolic = metabolic
+    """
+    The Warden of the Abyss. Manages the Dark Web, the Scavenger, and the Doppelgänger.
+    """
+    def __init__(self, psyche_engine, hypothalamus: HypothalamusEngine, metabolic_engine: MetabolicEngine):
+        self.psyche = psyche_engine
+        self.hypothalamus = hypothalamus
+        self.metabolic = metabolic_engine
+        
+        # The Abyssal Architecture
         self.dark_web = DarkWeb()
         self.scavenger = TraumaScavenger(self.dark_web)
-        self.doppel = Doppelganger(self.dark_web)
-        logger.info("ShadowIntegrator initialized.")
+        self.doppelganger = Doppelganger(self.dark_web)
+        
+        logger.info("ShadowIntegrator (Abyssal Architecture) initialized.")
 
     async def monitor(self):
         while self.psyche.is_running:
-            self.doppel.grow()
-            if self.doppel.hijack():
-                logger.critical("SHADOW EVENT: HIJACK!")
-                self.hypo.report_event("THREAT") # Force Panic
-                self.doppel.power = 0.0
+            self.doppelganger.grow()
+            
+            if self.doppelganger.attempt_hijack():
+                logger.critical("SHADOW EVENT: The Doppelgänger has hijacked the Intuition Conduit!")
+                # CORRECTED: Pass simple string event
+                self.hypothalamus.report_event("THREAT") 
+                # Reset strength (Catharsis)
+                self.doppelganger.power = 0.0 # Corrected attribute name from strength to power based on Doppelganger class
+                
             await asyncio.sleep(1.0)
 
-    def repress(self, nid, intensity):
-        n = self.metabolic.graph.get_neuron(nid)
-        name = n.payload.get('name', 'Unknown') if n else 'Unknown'
-        logger.critical(f"REPRESSION: Casting '{name}' into Abyss.")
+    def repress(self, neuron_id: UUID, intensity: float):
+        """
+        The core logic for repressing a memory. Now feeds the Dark Web.
+        """
+        neuron = self.metabolic.graph.get_neuron(neuron_id)
+        name = neuron.payload.get('name', 'Unknown') if neuron else 'Unknown'
         
+        logger.critical(f"REPRESSION: Casting '{name}' into the Abyss.")
+        
+        # 1. Scavenge the concept
         self.scavenger.feed(name)
         
-        # Dampen twin
-        twin = self.psyche.r_graph.get_neuron(nid)
-        if twin:
-            for c in twin.connections: c.weight *= (1.0 - intensity)
+        # 2. Dampen the conscious link (Standard repression)
+        subconscious_twin = self.psyche.r_graph.get_neuron(neuron_id)
+        if subconscious_twin:
+            for cleft in subconscious_twin.connections:
+                cleft.weight *= (1.0 - intensity)

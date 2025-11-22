@@ -3,7 +3,7 @@ import logging
 from dataclasses import dataclass
 from typing import List
 
-from genesis_trinity import config
+from genesis import config
 from neuro_genome.symbolic import SymbolicVector
 from .narrative_arc import NarrativeArcEngine
 from neuro_mitochondria.engine import MetabolicEngine

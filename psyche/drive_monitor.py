@@ -2,9 +2,10 @@ import asyncio
 import logging
 from typing import List
 
-from genesis_trinity import config
-from genesis_trinity.health.interface import SomaticInterface
-from genesis_trinity.neuro_genome.drive import ALL_DRIVES, DriveAxis
+from genesis import config
+# CORRECTED: Import from 'soma' package, not 'health'
+from soma.interface import SomaticInterface 
+from neuro_genome.drive import ALL_DRIVES, DriveAxis
 from .engine import PsycheEngine
 
 logger = logging.getLogger(__name__)
@@ -28,26 +29,24 @@ class DriveMonitor:
 
     async def _process_drives(self):
         for drive in ALL_DRIVES:
-            # 1. Get Vital Status
+            # 1. Get Status
+            # Note: Drive definitions use strings for organ names now to decouple
+            # We need to ensure SomaticInterface accepts the string name
             status = self.soma.get_vital(drive.linked_organ_name)
             
             # 2. Calculate Deficit
-            # If value is 1.0 (Full), deficit is 0.0.
-            # If value is 0.2 (Empty), deficit is 0.8.
             deficit = max(0.0, 1.0 - status.value)
             
-            # Ignore negligible needs
             if deficit < 0.1: continue
 
-            # 3. Calculate Urgency (The Multiplier)
+            # 3. Calculate Urgency
             urgency = drive.urgency_multiplier
             if status.trend == "DROPPING":
                 urgency *= 1.5
             elif status.trend == "PLUMMETING":
-                urgency *= 3.0 # Panic State
+                urgency *= 3.0
 
-            # 4. Inject the Drive Wave
-            # A continuous hum at the drive's frequency
+            # 4. Inject Wave
             amplitude = deficit * urgency
             
             self.psyche.inject_wave(

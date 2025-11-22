@@ -3,7 +3,7 @@ import logging
 from typing import Set
 from uuid import UUID
 
-from genesis_trinity import config
+from genesis import config
 from neuro_genome.schemas import ResonanceCleft
 from neuro_genome.enums import NeuronType
 from .engine import PsycheEngine

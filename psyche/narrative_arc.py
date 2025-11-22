@@ -2,7 +2,7 @@ import logging
 from collections import deque
 from typing import List
 
-from genesis_trinity import config
+from genesis import config
 from neuro_genome.symbolic import SymbolicVector
 from neuro_mitochondria.engine import MetabolicEngine
 

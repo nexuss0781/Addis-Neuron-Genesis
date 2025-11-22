@@ -3,7 +3,7 @@ import asyncio
 from typing import List, Optional
 from uuid import UUID
 
-from genesis_trinity import config
+from genesis import config
 from neuro_cytoplasm.graph import NeuralGraph
 from neuro_genome.schemas import Neuron
 from neuro_genome.enums import NeuronType

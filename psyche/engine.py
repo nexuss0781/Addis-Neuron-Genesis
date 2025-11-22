@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Dict, Optional
 from uuid import UUID
 
-from genesis_trinity import config
+from genesis import config
 from neuro_cytoplasm.graph import NeuralGraph
 from neuro_cytoplasm.resonance_graph import ResonanceGraph
 
