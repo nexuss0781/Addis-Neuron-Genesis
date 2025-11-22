@@ -10,8 +10,8 @@ logging.basicConfig(
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DICT_PATH = os.path.join(BASE_DIR, "genesis_trinity/genesis/GenesisDictionary.yaml")
-OUTPUT_PATH = "newborn.json.gz"
+DICT_PATH = os.path.join(BASE_DIR, "genesis/GenesisDictionary.yaml")
+OUTPUT_PATH = "newborn.db"
 
 if __name__ == "__main__":
     if not os.path.exists(DICT_PATH):
