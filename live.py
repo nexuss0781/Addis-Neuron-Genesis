@@ -17,8 +17,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("GenesisTrinity")
 
-STATE_FILE = "newborn.json.gz"
-DICT_FILE = "genesis_trinity/genesis/GenesisDictionary.yaml"
+STATE_FILE = "newborn.db"
+DICT_FILE = "genesis/GenesisDictionary.yaml"
 
 async def main():
     logger.critical(">>> GENESIS TRINITY: SYSTEM STARTUP <<<")
