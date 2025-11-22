@@ -2,7 +2,7 @@ import logging
 import asyncio
 from typing import List
 
-from genesis_trinity import config
+from genesis import config
 from neuro_cytoplasm.graph import NeuralGraph
 from neuro_mitochondria.engine import MetabolicEngine
 from neuro_genome.schemas import Neuron, SynapticCleft

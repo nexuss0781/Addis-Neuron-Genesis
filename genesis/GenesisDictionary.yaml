@@ -1,0 +1,107 @@
+- word: "sun"
+  id: "en_sun_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "The star around which the earth orbits."
+  synonyms: ["star"]
+  antonyms: []
+
+- word: "star"
+  id: "en_star_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "A fixed luminous point in the night sky which is a large, remote incandescent body."
+  synonyms: ["sun"]
+  antonyms: []
+
+- word: "earth"
+  id: "en_earth_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "The planet on which we live."
+  synonyms: []
+  antonyms: []
+
+- word: "life"
+  id: "en_life_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "The condition that distinguishes animals and plants from inorganic matter."
+  synonyms: ["existence"]
+  antonyms: ["death"]
+
+- word: "death"
+  id: "en_death_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "The action or fact of dying or being killed."
+  synonyms: ["end"]
+  antonyms: ["life"]
+
+- word: "existence"
+  id: "en_exist_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "The fact or state of living or having objective reality."
+  synonyms: ["life"]
+  antonyms: []
+
+- word: "end"
+  id: "en_end_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "A final part of something."
+  synonyms: ["death"]
+  antonyms: ["start"]
+
+- word: "start"
+  id: "en_start_001"
+  language: "en"
+  definitions:
+    - pos: "noun"
+      text: "The point in time or space at which something has its origin."
+  synonyms: []
+  antonyms: ["end"]
+
+- word: "happy"
+  id: "en_happy_001"
+  language: "en"
+  definitions:
+    - pos: "adjective"
+      text: "Feeling or showing pleasure or contentment."
+  synonyms: ["joyful"]
+  antonyms: ["sad"]
+
+- word: "sad"
+  id: "en_sad_001"
+  language: "en"
+  definitions:
+    - pos: "adjective"
+      text: "Feeling or showing sorrow; unhappy."
+  synonyms: ["unhappy"]
+  antonyms: ["happy"]
+
+- word: "joyful"
+  id: "en_joy_001"
+  language: "en"
+  definitions:
+    - pos: "adjective"
+      text: "Feeling, expressing, or causing great pleasure and happiness."
+  synonyms: ["happy"]
+  antonyms: []
+
+- word: "unhappy"
+  id: "en_unhappy_001"
+  language: "en"
+  definitions:
+    - pos: "adjective"
+      text: "Not happy."
+  synonyms: ["sad"]
+  antonyms: []

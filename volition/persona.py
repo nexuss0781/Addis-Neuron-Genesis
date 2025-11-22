@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from genesis_trinity.neuro_genome.affective import ALL_PRIMAL_AXES
+from neuro_genome.affective import ALL_PRIMAL_AXES
 
 logger = logging.getLogger(__name__)
 

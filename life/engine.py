@@ -1,9 +1,10 @@
 import asyncio
 import logging
-from genesis_trinity import config
+from genesis import config
 
 # Import ALL Architectures
-from neuro_cytoplasm.persistence import reanimate
+# CORRECTED: Use reanimate_organism instead of reanimate
+from neuro_cytoplasm.persistence import reanimate_organism 
 from neuro_mitochondria.engine import MetabolicEngine
 from soma.interface import SomaticInterface
 from psyche.engine import PsycheEngine
@@ -34,7 +35,8 @@ class LifeEngine:
     """The Master Runtime Kernel."""
     def __init__(self, state_file):
         self.state_file = state_file
-        self.c_graph, self.r_graph = reanimate(state_file)
+        # CORRECTED: Use the new function name
+        self.c_graph, self.r_graph = reanimate_organism(state_file)
         
         # --- Instantiate Systems (Dependency Order) ---
         

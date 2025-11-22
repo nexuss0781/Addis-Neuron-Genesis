@@ -4,10 +4,10 @@ import logging
 import math
 from typing import Tuple, Optional
 
-from genesis_trinity import config
+from genesis import config
 from neuro_genome.schemas import ResonanceNeuron, ResonanceCleft
 from neuro_genome.enums import NeuronType
-from genesis_trinity.neuro_genome.affective import ALL_PRIMAL_AXES
+from neuro_genome.affective import ALL_PRIMAL_AXES
 from .engine import PsycheEngine, ResonanceGraph
 
 logger = logging.getLogger(__name__)

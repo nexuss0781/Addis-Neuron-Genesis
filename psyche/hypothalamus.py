@@ -2,7 +2,7 @@ import asyncio
 import logging
 from typing import Tuple
 
-from genesis_trinity.neuro_genome.affective import VALENCE_AXIS, AROUSAL_AXIS, DOMINANCE_AXIS
+from neuro_genome.affective import VALENCE_AXIS, AROUSAL_AXIS, DOMINANCE_AXIS
 from .engine import PsycheEngine
 
 logger = logging.getLogger(__name__)
