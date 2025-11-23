@@ -16,6 +16,14 @@ class NeuronType(Enum):
     LOGICAL_CONCEPT = auto()
     LOGICAL_RELATIONAL_OPERATOR = auto()
     LOGICAL_PATTERN = auto()
+   
+
+   # (Add these to NeuronType enum)
+    LINGUISTIC_PARAGRAPH = auto()
+    LINGUISTIC_PAGE = auto()
+    LINGUISTIC_BOOK = auto()
+    LINGUISTIC_SHELF = auto()
+    LOGICAL_TOPIC = auto() # Replaces simple Topic
 
     # === SYSTEM 1: SUBCONSCIOUS PSYCHE ===
     # The fundamental particle of the subconscious
