@@ -90,3 +90,9 @@ but u have to know that some maths foncepts allowes but i extremely avoid totall
 True reseaning doesn't squired by maths so our appeoch is get true reseaning and real semantical meaning by mimicking humans biologically.
 
 our goal: mimuick uumans highly and get agi immediately then by integrating mellion instances into one grand instace that has every knowlegne of indivisuals to get asi.that's it. please i need the current immplementation shaped by my cear vision and intent now.
+
+
+your task isn't implemntation, i want u clean upthe codebase not from scope of our principles, then Docunent Everything scoped at me odes, then a detsiiled todo to implement only v2.0.0 .md phase 1 and phase what implemented and what left then deliver and push changes.
+i want comprehensive detail analysis may u need several node action to read, organize and clesned up to shape it like mine need.
+
+u have analyze everything throughly v2.0.0 .md ideas and my above ideas.
