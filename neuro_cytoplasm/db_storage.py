@@ -180,7 +180,7 @@ class AGIDatabase:
             for i, neuron in enumerate(graph._neurons.values()):
                 for synapse in neuron.connections:
                     # Note: ResonanceNeuron synapse is a simple dict-like object in the original code
-                    synapse_data.append((str(neuron.neuron_id), str(synapse['target_id']), synapse['weight']))
+                    synapse_data.append((str(neuron.neuron_id), str(synapse.target_id), synapse.weight))
                     total_synapses += 1
                 
                 if (i + 1) % batch_size == 0:
