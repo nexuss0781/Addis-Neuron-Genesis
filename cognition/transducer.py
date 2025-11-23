@@ -1,15 +1,15 @@
 
-    import asyncio
-    import logging
+import asyncio
+import logging
 
-    from genesis_trinity import config
-    from neuro_cytoplasm.graph import NeuralGraph
-    from neuro_mitochondria.engine import MetabolicEngine, Signal
-    from neuro_genome.enums import NeuronType
+from genesis import config
+from neuro_cytoplasm.graph import NeuralGraph
+from neuro_mitochondria.engine import MetabolicEngine, Signal
+from neuro_genome.enums import NeuronType
 
-    logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
-    class LexicalTransducer:
+class LexicalTransducer:
         """
         The AGI's "Optic Nerve."
 
@@ -30,8 +30,7 @@
             """
             Takes a string and streams it into the SENSORY_INPUT_QUEUE.
             """
-            logger.debug(f"Streaming text into sensory pathway: '{text[:50]}...'
-")
+            logger.debug(f"Streaming text into sensory pathway: '{text[:50]}...'")
 
             for char in text:
                 char_lower = char.lower()
