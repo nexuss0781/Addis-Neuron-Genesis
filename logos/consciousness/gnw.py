@@ -12,7 +12,7 @@ class GlobalNeuronalWorkspace:
     It identifies the neuron with the highest activation potential (NAP)
     as the current 'focus' of consciousness.
     """
-    def __init__(self, c_graph: NeuralGraph, threshold: float = 1.5):
+    def __init__(self, c_graph: NeuralGraph, threshold: float = 0.9):
         self.c_graph = c_graph
         self.threshold = threshold
         self.current_focus: Optional[UUID] = None
@@ -32,10 +32,13 @@ class GlobalNeuronalWorkspace:
                 highest_nap = neuron.nap
                 candidate_focus = neuron_id
 
+        logger.info(f"Highest NAP: {highest_nap} | Candidate: {candidate_focus}")
         if highest_nap > self.threshold:
             if candidate_focus != self.current_focus:
                 self.current_focus = candidate_focus
                 self.focus_history.append(self.current_focus)
-                logger.debug(f"GNW Focus shifted to: {self.c_graph.get_neuron(self.current_focus)}")
+                logger.info(f"GNW Focus shifted to: {self.c_graph.get_neuron(self.current_focus)}")
         else:
+            if self.current_focus is not None:
+                logger.info("GNW focus lost.")
             self.current_focus = None
