@@ -130,3 +130,6 @@ credentials.*
 *.backup
 *.tmp
 *.temp
+
+vast_mind.json.gz
+vast_mind.json.bz2

@@ -37,6 +37,9 @@ class MetabolicEngine:
         
         # Memory
         self.firing_trace: Deque = collections.deque(maxlen=100)
+
+        # Consciousness Interface
+        self.gnw = None
         
         logger.info("MetabolicEngine (The CPU) initialized.")
 
@@ -59,8 +62,12 @@ class MetabolicEngine:
                 await self.signal_queue.join() # Wait for signals to process
                 await self._check_for_firings()
                 await self._apply_decay()
+
+                # 2. Consciousness Cycle
+                if self.gnw:
+                    self.gnw.update_focus()
                 
-                # 2. Tick
+                # 3. Tick
                 await asyncio.sleep(self.tick_duration)
         finally:
             self.is_running = False

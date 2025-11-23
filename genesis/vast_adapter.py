@@ -41,12 +41,16 @@ class VastDictionaryAdapter:
                 # We assume the JSON is a list of objects.
                 # For truly massive files (GBs), we'd use a streaming library like ijson.
                 # For standard dictionaries (MBs), json.load is fine.
+                logger.info("Starting json.load(). This may take a while for large files...")
                 raw_data = json.load(f)
+                logger.info("json.load() complete.")
                 
             logger.info(f"JSON loaded. Processing {len(raw_data)} raw entries...")
 
-            for raw_entry in raw_data:
+            for i, raw_entry in enumerate(raw_data):
                 cleaned_entry = self._normalize_entry(raw_entry)
+                if i % 10000 == 0 and i > 0:
+                    logger.info(f"Adapter: Processed {i} raw entries. Valid: {self.valid_entries}, Skipped: {self.skipped_entries}")
                 if cleaned_entry:
                     self.valid_entries += 1
                     yield cleaned_entry
