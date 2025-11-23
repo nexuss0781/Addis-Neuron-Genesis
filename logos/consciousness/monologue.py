@@ -10,11 +10,13 @@ class InnerMonologue:
     """
     The Feedback Loop.
     Feeds the output of the Generator back into the Transducer.
+    It IS the GNW's broadcast mechanism.
     """
-    def __init__(self, transducer, generator: Serializer):
+    def __init__(self, transducer, generator: Serializer, gnw):
         self.transducer = transducer
         self.generator = generator
-        self.is_active = True # Default to active so it hears itself
+        self.gnw = gnw
+        self.is_active = True
 
     async def think_aloud(self, pvi):
         """
