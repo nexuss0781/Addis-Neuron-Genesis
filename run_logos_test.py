@@ -6,8 +6,8 @@ import sys
 # Path setup
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from genesis_trinity.life.engine import LifeEngine
-from genesis_trinity.neuro_genome.enums import NeuronType
+from life.engine import LifeEngine
+from neuro_genome.enums import NeuronType
 
 # Configure logging to be cleaner for chat
 logging.basicConfig(level=logging.ERROR) 
