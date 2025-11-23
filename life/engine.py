@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 class LifeEngine:
     """The Master Runtime Kernel."""
     def __init__(self, state_file):
+        logging.basicConfig(level=logging.INFO)
         self.state_file = state_file
         self.c_graph, self.r_graph = reanimate_organism(state_file)
         
