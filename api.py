@@ -7,9 +7,6 @@ from neuro_genome.enums import NeuronType
 import os
 import sys
 import time
-import logging
-
-logging.basicConfig(level=logging.INFO)
 
 # Path setup
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
