@@ -53,6 +53,7 @@ class MetabolicEngine:
             asyncio.create_task(self._signal_worker())
             for _ in range(os.cpu_count() or 1)
         ]
+        sensory_worker_task = asyncio.create_task(self._sensory_worker())
 
         try:
             while self.is_running:
@@ -75,6 +76,18 @@ class MetabolicEngine:
 
     def stop(self):
         self.is_running = False
+
+    async def _sensory_worker(self):
+        while True:
+            try:
+                signal = await self.sensory_input_queue.get()
+                target = self.graph.get_neuron(signal.target_id)
+                if target:
+                    # Sensory input should be strong
+                    target.nap = min(2.0, max(0.0, target.nap + (signal.weight * 1.5)))
+                self.sensory_input_queue.task_done()
+            except asyncio.CancelledError:
+                break
 
     async def _signal_worker(self):
         while True:

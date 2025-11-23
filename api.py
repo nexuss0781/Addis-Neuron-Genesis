@@ -7,9 +7,13 @@ from neuro_genome.enums import NeuronType
 import os
 import sys
 import time
+import logging
 
 # Path setup
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(name)s - %(message)s')
 
 app = Flask(__name__)
 
