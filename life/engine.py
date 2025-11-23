@@ -28,6 +28,9 @@ from logos.consciousness.monologue import InnerMonologue
 # Import VectorSpace to init context
 from logos.vector_space import SemanticSpace
 
+# Import the GNW
+from logos.consciousness.gnw import GlobalNeuronalWorkspace
+
 logger = logging.getLogger(__name__)
 
 class LifeEngine:
@@ -63,14 +66,18 @@ class LifeEngine:
         
         self.social = SocialMirror() # Empathy
         self.gap_engine = GapEngine(self.c_graph) # Curiosity
+
+        # --- 4. CONSCIOUSNESS (The Spotlight) ---
+        self.gnw = GlobalNeuronalWorkspace(self.c_graph)
+        self.metabolic.gnw = self.gnw # Let the clock drive the GNW
         
         # The Transducer was in 'cognition', now wrapped by Monologue
         # (Assuming Transducer exists from Phase 1.8)
-        from cognition.transducer import LexicalTransducer 
+        from cognition.transducer import LexicalTransducer
         self.transducer = LexicalTransducer(self.c_graph, self.metabolic)
-        
-        self.monologue = InnerMonologue(self.transducer, self.serializer) # Consciousness
-        
+
+        self.monologue = InnerMonologue(self.transducer, self.serializer, self.gnw) # Consciousness
+
         self.corpus_eater = CorpusEater(self.c_graph) # Ingestion (Heavy tool, run on demand)
 
         logger.critical("LIFE ENGINE: Logos Systems online.")
